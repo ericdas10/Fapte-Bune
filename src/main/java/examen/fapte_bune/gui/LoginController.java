@@ -4,30 +4,53 @@ import examen.fapte_bune.service.Service;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class LoginController {
+public class LoginController implements Initializable {
     @FXML
     private ListView<String> usernameListView;
     @FXML
     private Label errorLabel;
 
     private Service service;
-    private String resourcePath;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Initialize UI components
+        usernameListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        errorLabel.setText("");
+
+        // Set cell factory for better display
+        usernameListView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item);
+                }
+            }
+        });
+
+        // Add listener for selection changes
+        usernameListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                errorLabel.setText("");
+            }
+        });
+    }
 
     public void setService(Service service) {
         this.service = service;
-        try {
-            this.resourcePath = new File(".").getCanonicalPath() + "/src/main/resources/examen/fapte_bune/";
-            loadUsernames();
-        } catch (IOException e) {
-            errorLabel.setText("Error initializing: " + e.getMessage());
-        }
+        loadUsernames();
     }
 
     private void loadUsernames() {
@@ -57,10 +80,10 @@ public class LoginController {
     @FXML
     private void handleOpenRegister() {
         try {
-            String registerPath = resourcePath + "register.fxml";
-            FXMLLoader loader = new FXMLLoader(new File(registerPath).toURI().toURL());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/examen/fapte_bune/register.fxml"));
+            Scene scene = new Scene(loader.load());
             Stage stage = new Stage();
-            stage.setScene(new Scene(loader.load()));
+            stage.setScene(scene);
             RegisterController controller = loader.getController();
             controller.setService(service);
             controller.setLoginController(this);
@@ -72,15 +95,22 @@ public class LoginController {
 
     private void openMainWindow() {
         try {
-            String mainPath = resourcePath + "main.fxml";
-            FXMLLoader loader = new FXMLLoader(new File(mainPath).toURI().toURL());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/examen/fapte_bune/main.fxml"));
+            Scene scene = new Scene(loader.load());
             Stage stage = new Stage();
-            stage.setScene(new Scene(loader.load()));
+            stage.setScene(scene);
             MainController controller = loader.getController();
             controller.setService(service);
             stage.show();
+
+            // Close login window
+            ((Stage) usernameListView.getScene().getWindow()).close();
         } catch (IOException e) {
             errorLabel.setText("Error opening main window: " + e.getMessage());
         }
+    }
+
+    public void refresh() {
+        loadUsernames();
     }
 }

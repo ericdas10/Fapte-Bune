@@ -4,6 +4,7 @@ import examen.fapte_bune.domain.Oras;
 import examen.fapte_bune.service.Service;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -11,8 +12,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class RegisterController {
+public class RegisterController implements Initializable {
     @FXML
     private TextField numeField;
     @FXML
@@ -37,9 +40,15 @@ public class RegisterController {
     private Service service;
     private LoginController loginController;
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         orasComboBox.setItems(FXCollections.observableArrayList(Oras.values()));
+        errorLabel.setText("");
+
+        // Add listeners for validation
+        usernameField.textProperty().addListener((obs, oldVal, newVal) -> errorLabel.setText(""));
+        parolaField.textProperty().addListener((obs, oldVal, newVal) -> errorLabel.setText(""));
+        confirmParolaField.textProperty().addListener((obs, oldVal, newVal) -> errorLabel.setText(""));
     }
 
     public void setService(Service service) {
@@ -65,6 +74,7 @@ public class RegisterController {
                     numarStradaField.getText(),
                     telefonField.getText()
             );
+            loginController.refresh();
             closeWindow();
         } catch (IOException e) {
             errorLabel.setText("Registration error: " + e.getMessage());
@@ -72,11 +82,22 @@ public class RegisterController {
     }
 
     private boolean validateInputs() {
+        if (numeField.getText().isEmpty() || prenumeField.getText().isEmpty() ||
+                usernameField.getText().isEmpty() || parolaField.getText().isEmpty()) {
+            errorLabel.setText("Please fill in all required fields");
+            return false;
+        }
+
         if (!parolaField.getText().equals(confirmParolaField.getText())) {
             errorLabel.setText("Passwords don't match");
             return false;
         }
-        // Add more validations as needed
+
+        if (orasComboBox.getValue() == null) {
+            errorLabel.setText("Please select a city");
+            return false;
+        }
+
         return true;
     }
 

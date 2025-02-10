@@ -7,13 +7,16 @@ import examen.fapte_bune.util.Observer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ResourceBundle;
 
-public class MainController implements Observer {
+public class MainController implements Observer, Initializable {
     @FXML
     private TableView<Nevoie> nevoiDisponibileTable;
     @FXML
@@ -38,9 +41,10 @@ public class MainController implements Observer {
 
     private Service service;
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         setupColumns();
+        setupInputValidation();
     }
 
     private void setupColumns() {
@@ -50,6 +54,14 @@ public class MainController implements Observer {
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         setupActionsColumn();
+    }
+
+    private void setupInputValidation() {
+        titluNevoieField.textProperty().addListener((obs, oldVal, newVal) ->
+                titluNevoieField.setStyle(newVal.isEmpty() ? "-fx-border-color: red;" : "-fx-border-color: none;"));
+
+        descriereNevoieField.textProperty().addListener((obs, oldVal, newVal) ->
+                descriereNevoieField.setStyle(newVal.isEmpty() ? "-fx-border-color: red;" : "-fx-border-color: none;"));
     }
 
     private void setupActionsColumn() {
@@ -101,6 +113,8 @@ public class MainController implements Observer {
 
     @FXML
     private void handleAdaugaNevoie() {
+        if (!validateInputs()) return;
+
         try {
             service.adaugaNevoie(
                     titluNevoieField.getText(),
@@ -111,6 +125,16 @@ public class MainController implements Observer {
         } catch (IOException e) {
             showError("Error adding need", e);
         }
+    }
+
+    private boolean validateInputs() {
+        if (titluNevoieField.getText().isEmpty() ||
+                descriereNevoieField.getText().isEmpty() ||
+                deadlinePicker.getValue() == null) {
+            showError("Validation Error", new Exception("Please fill in all fields"));
+            return false;
+        }
+        return true;
     }
 
     private void clearInputs() {

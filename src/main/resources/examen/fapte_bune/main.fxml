@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<TabPane xmlns="http://javafx.com/javafx/19"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="examen.fapte_bune.gui.MainController"
+         tabClosingPolicy="UNAVAILABLE">
+
+    <Tab text="Doresc să ajut!">
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <TableView fx:id="nevoiDisponibileTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="titluColumn" text="Titlu"/>
+                    <TableColumn fx:id="descriereColumn" text="Descriere"/>
+                    <TableColumn fx:id="deadlineColumn" text="Deadline"/>
+                    <TableColumn fx:id="statusColumn" text="Status"/>
+                    <TableColumn fx:id="actionsColumn" text="Acțiuni"/>
+                </columns>
+            </TableView>
+
+            <Label text="Faptele mele bune:" style="-fx-font-weight: bold"/>
+            <TableView fx:id="fapteleMeleTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="titluFaptaColumn" text="Titlu"/>
+                    <TableColumn fx:id="descriereFaptaColumn" text="Descriere"/>
+                    <TableColumn fx:id="deadlineFaptaColumn" text="Deadline"/>
+                    <TableColumn fx:id="statusFaptaColumn" text="Status"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </Tab>
+
+    <Tab text="Doresc să fiu ajutat!">
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <TextField fx:id="titluNevoieField" promptText="Titlu"/>
+            <TextArea fx:id="descriereNevoieField" promptText="Descriere" prefRowCount="3"/>
+            <DatePicker fx:id="deadlinePicker" promptText="Deadline"/>
+            <Button text="Adaugă nevoie" onAction="#handleAdaugaNevoie"/>
+        </VBox>
+    </Tab>
+</TabPane>

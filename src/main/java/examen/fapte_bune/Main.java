@@ -21,10 +21,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             initializeService();
-            FXMLLoader loader = loadFXML("/examen/fapte_bune/login.fxml");
+            FXMLLoader loader = loadFXML();
             initializeScene(primaryStage, loader);
         } catch (Exception e) {
-            showErrorAndExit("Application Error", e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -34,8 +34,8 @@ public class Main extends Application {
         service = new Service(persoaneRepo, nevoiRepo);
     }
 
-    private FXMLLoader loadFXML(String fxmlPath) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+    private FXMLLoader loadFXML() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/examen/fapte_bune/login.fxml"));
         loader.load();
         LoginController controller = loader.getController();
         controller.setService(service);

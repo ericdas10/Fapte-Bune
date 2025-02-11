@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <javafx.version>17</javafx.version>
+        <javafx.version>17.0.12</javafx.version>
         <junit.version>5.10.2</junit.version>
     </properties>
 
@@ -26,17 +26,22 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>17.0.6</version>
+            <version>17.0.12</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>17.0.6</version>
+            <version>17.0.12</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
-            <version>17.0.6</version>
+            <version>17.0.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>17.0.12</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -46,7 +51,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>17.0.6</version>
+            <version>17.0.12</version>
         </dependency>
         <dependency>
             <groupId>org.controlsfx</groupId>
@@ -141,7 +146,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>examen.fapte_bune/examen.fapte_bune.HelloApplication</mainClass>
+                            <mainClass>examen.fapte_bune/examen.fapte_bune.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

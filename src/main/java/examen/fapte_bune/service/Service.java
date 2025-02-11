@@ -70,12 +70,13 @@ public class Service implements Observable {
         return StreamSupport.stream(nevoiRepo.findAll().spliterator(), false)
                 .filter(nevoie -> {
                     try {
-                        Persoana omInNevoie = persoaneRepo.findOne(nevoie.getOmInNevoie()).orElse(null);
-                        return omInNevoie != null &&
-                                omInNevoie.getOras() == oras &&
+                        Optional<Persoana> omInNevoie = persoaneRepo.findOne(nevoie.getOmInNevoie());
+                        return omInNevoie.isPresent() &&
+                                omInNevoie.get().getOras() == oras &&
                                 !nevoie.getOmInNevoie().equals(currentUser.getId()) &&
                                 nevoie.getStatus() == Status.Caut_Erou;
                     } catch (IOException e) {
+                        e.printStackTrace();
                         return false;
                     }
                 })
@@ -118,8 +119,15 @@ public class Service implements Observable {
             throw new IllegalStateException("Nu exista user logat!");
         }
 
+        // Create new Nevoie with null omSalvator
         Nevoie nevoie = new Nevoie(titlu, descriere, deadline, currentUser.getId(), null, Status.Caut_Erou);
-        nevoiRepo.save(nevoie);
+        Optional<Nevoie> savedNevoie = nevoiRepo.save(nevoie);
+
+        if (savedNevoie.isEmpty()) {
+            throw new IOException("Nu s-a putut salva nevoia!");
+        }
+
+        // Notify observers after successful save
         notifyObservers();
     }
 

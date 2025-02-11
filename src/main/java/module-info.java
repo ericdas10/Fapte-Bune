@@ -12,6 +12,10 @@ module examen.fapte_bune {
     requires com.almasb.fxgl.all;
     requires java.sql;
 
-    opens examen.fapte_bune to javafx.fxml;
     exports examen.fapte_bune;
+    exports examen.fapte_bune.gui;
+    exports examen.fapte_bune.domain;
+    opens examen.fapte_bune.gui to javafx.fxml;
+    opens examen.fapte_bune.domain to javafx.base;
+    opens examen.fapte_bune to javafx.graphics, javafx.fxml;
 }

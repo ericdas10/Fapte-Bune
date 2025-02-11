@@ -103,8 +103,12 @@ public class LoginController implements Initializable {
             controller.setService(service);
             stage.show();
 
-            // Close login window
-            ((Stage) usernameListView.getScene().getWindow()).close();
+            // Don't close login window
+            // ((Stage) usernameListView.getScene().getWindow()).close();
+
+            // Clear selection after successful login
+            usernameListView.getSelectionModel().clearSelection();
+            errorLabel.setText("");
         } catch (IOException e) {
             errorLabel.setText("Error opening main window: " + e.getMessage());
         }
